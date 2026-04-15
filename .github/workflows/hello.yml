@@ -12,3 +12,10 @@ jobs:
 
       - name: Print message 2
         run: echo "Sneha Khanna"
+
+  say-bye:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print message
+        run: echo "Goodbye from second job"
