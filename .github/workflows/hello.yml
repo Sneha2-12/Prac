@@ -9,3 +9,7 @@ jobs:
     steps:
       - name: Print message
         run: echo "Hello, GitHub Action"
+
+    steps1:
+      - name: Print message
+        run: echo "Sneha Khanna"
