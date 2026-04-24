@@ -1,52 +1,33 @@
-name : My First Workflow
+name: Artifact Demo
 
-on : [push, pull_request]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  say-hello:
+  create-file:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print message
-        run: echo "Hello, GitHub Action"
+      - name: Create file
+        run: echo "Hello World from Job 1" > file.txt
 
-      - name: Print message 2
-        run: echo "Sneha Khanna"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-file
+          path: file.txt
 
-  say-bye:
+  read-file:
     runs-on: ubuntu-latest
+    needs: create-file
 
     steps:
-      - name: Print message
-        run: echo "Goodbye from second job"
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: my-file
 
-  test-app:
-    runs-on: ubuntu-latest
-    needs: [say-hello, say-bye]
-
-    steps: 
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Show branch & commit info
-        run: |
-          echo "Branch: ${{ github.ref }}"
-          echo "Commit: ${{ github.sha }}"
-
-      - name: Run test step
-        run: echo "Running tests before deployment..."
-
-  deploy-app:
-    runs-on: ubuntu-latest
-    needs: test-app
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Checkout code
-        uses:  actions/checkout@v4
-
-      - name: Build Application
-        run: echo "Building the Application..."
-
-      - name: Deploy Application
-        run: echo "Deploying the Application..."
+      - name: Read file
+        run: cat file.txt
